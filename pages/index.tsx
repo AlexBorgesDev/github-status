@@ -10,6 +10,18 @@ import getStatusService, {
 } from '../services/getStatusService'
 
 const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
+  const getStatusState = () => {
+    const operational = data.filter(
+      ({ status }) => status === 'Operational'
+    ).length
+
+    if (operational === data.length) return 'allOperational'
+
+    if (operational === 0) return 'noneOperational'
+
+    return 'notAllOperational'
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -19,7 +31,10 @@ const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
+        <h1
+          className={styles.title}
+          data-error={getStatusState() !== 'allOperational'}
+        >
           Welcome to <Link href="/">GitHub Status</Link>
         </h1>
 
@@ -29,14 +44,12 @@ const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
 
         <div className={styles.status}>
           {(() => {
-            const operational = data.filter(
-              ({ status }) => status === 'Operational'
-            ).length
+            const statusState = getStatusState()
 
-            if (operational === data.length)
+            if (statusState === 'allOperational')
               return <p>All services are operational</p>
 
-            if (operational === 0)
+            if (statusState === 'noneOperational')
               return <p data-error>No services are operational</p>
 
             return <p data-error>Not all services are operational</p>

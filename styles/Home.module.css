@@ -34,7 +34,7 @@
 }
 
 .title a {
-  color: #0070f3;
+  color: #28a745;
   text-decoration: none;
 
   transition: filter 0.15s ease-in-out;
@@ -43,7 +43,11 @@
 .title a:hover,
 .title a:focus,
 .title a:active {
-  filter: brightness(125%);
+  filter: brightness(112%);
+}
+
+.title[data-error='true'] a {
+  color: #dbab09;
 }
 
 .title {
