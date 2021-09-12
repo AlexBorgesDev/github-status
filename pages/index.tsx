@@ -9,6 +9,8 @@ import getStatusService, {
   IGetStatusElements,
 } from '../services/getStatusService'
 
+type StatusElementProps = { content: string; error?: 'warning' | 'error' }
+
 const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
   const getStatusState = () => {
     const operational = data.filter(
@@ -22,18 +24,65 @@ const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
     return 'notAllOperational'
   }
 
+  const statusElement = ({ content, error }: StatusElementProps) => {
+    return (
+      <div className={styles.status} data-error={error}>
+        <p>{content}</p>
+      </div>
+    )
+  }
+
+  const faviconFolder = () => {
+    if (data.length === 0) return 'error'
+
+    const statusState = getStatusState()
+
+    if (statusState === 'allOperational') return 'check'
+    else return 'warning'
+  }
+
   return (
     <div className={styles.container}>
       <Head>
         <title>GitHub Status</title>
         <meta name="description" content="See the status of GitHub services" />
-        <link rel="icon" href="/favicon.ico" />
+        <meta
+          name="theme-color"
+          content={
+            data.length === 0
+              ? '#bf1a2f'
+              : getStatusState() !== 'allOperational'
+              ? '#dbab09'
+              : '#28a745'
+          }
+        />
+
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href={`/${faviconFolder()}/apple-touch-icon.png`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href={`/${faviconFolder()}/favicon-32x32.png`}
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href={`/${faviconFolder()}/favicon-16x16.png`}
+        />
+        <link rel="icon" href={`/${faviconFolder()}/favicon.ico`} />
       </Head>
 
       <main className={styles.main}>
         <h1
           className={styles.title}
-          data-error={getStatusState() !== 'allOperational'}
+          data-error={
+            data.length === 0 ? 'error' : getStatusState() !== 'allOperational'
+          }
         >
           Welcome to <Link href="/">GitHub Status</Link>
         </h1>
@@ -42,19 +91,30 @@ const Home: NextPage<{ data: IGetStatusElements }> = ({ data }) => {
           See the current status of GitHub services
         </p>
 
-        <div className={styles.status}>
-          {(() => {
-            const statusState = getStatusState()
+        {(() => {
+          if (data.length === 0)
+            return statusElement({
+              error: 'error',
+              content:
+                'Something went wrong getting the status of GitHub services',
+            })
 
-            if (statusState === 'allOperational')
-              return <p>All services are operational</p>
+          const statusState = getStatusState()
 
-            if (statusState === 'noneOperational')
-              return <p data-error>No services are operational</p>
+          if (statusState === 'allOperational')
+            return statusElement({ content: 'All services are operational' })
 
-            return <p data-error>Not all services are operational</p>
-          })()}
-        </div>
+          if (statusState === 'noneOperational')
+            return statusElement({
+              content: 'No services are operational',
+              error: 'warning',
+            })
+
+          return statusElement({
+            content: 'Not all services are operational',
+            error: 'warning',
+          })
+        })()}
 
         <div className={styles.grid}>
           {data.map(({ name, status }) => (
