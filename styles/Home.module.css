@@ -5,7 +5,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 }
 
 .main {
@@ -50,6 +49,10 @@
   color: #dbab09;
 }
 
+.title[data-error='error'] a {
+  color: #bf1a2f;
+}
+
 .title {
   margin: 0;
   line-height: 1.15;
@@ -92,13 +95,22 @@
   font-weight: 700;
 }
 
-.status[data-error] {
+.status[data-error='warning'] {
   border-color: #dbab09;
   background-color: rgba(219, 170, 9, 0.1);
 }
 
-.status[data-error] p {
+.status[data-error='warning'] p {
   color: #dbab09;
+}
+
+.status[data-error='error'] {
+  border-color: #bf1a2f;
+  background-color: rgba(191, 26, 48, 0.1);
+}
+
+.status[data-error='error'] p {
+  color: #bf1a2f;
 }
 
 .grid {
