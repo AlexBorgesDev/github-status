@@ -8,7 +8,7 @@
 
 GitHub Status was made in order to learn web scraping and also the Next.js framework.
 
-Here you can see the status of GitHub services, whether they are operational or not. You can access it through the link: **[https://github-status-pied.vercel.app](https://github-status-pied.vercel.app)**
+Here you can see the status of GitHub services, whether they are operational or not. You can access it through the link: **[https://github-status.alexborgesdev.vercel.app/](https://github-status.alexborgesdev.vercel.app/)**
 
 > :warning: The data presented was taken from the [GitHub Status](https://www.githubstatus.com/) website
 
